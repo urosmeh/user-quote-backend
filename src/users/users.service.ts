@@ -1,42 +1,27 @@
 import { Injectable } from '@nestjs/common';
-
-export type User = {
-  id: number;
-  name: string;
-  username: string;
-  password: string;
-};
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: 1,
-      name: 'Uros',
-      username: 'uros',
-      password: 'geslo123',
-    },
-    {
-      id: 2,
-      name: 'Suzana',
-      username: 'suzi',
-      password: 'geslo1234',
-    },
-    {
-      id: 3,
-      name: 'Jane',
-      username: 'jane',
-      password: 'geslo123',
-    },
-    {
-      id: 4,
-      name: 'John',
-      username: 'john',
-      password: 'geslo123',
-    },
-  ];
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+
+  async create(username: string, password: string): Promise<User | undefined> {
+    const user = this.repo.create({ username, password });
+    this.repo.save(user);
+    return user;
+  }
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.users.find(user => user.username === username);
+    return this.repo.findOne({ where: { username } }); //username is unique, so this should be ok...
+  }
+
+  async findById(id: number): Promise<User | undefined> {
+    return this.repo.findOne({ where: { id } });
+  }
+
+  async find(username: string): Promise<User[] | []> {
+    return this.repo.find({ where: { username } });
   }
 }
