@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Quote } from 'src/quotes/quote.entity';
 import {
   Column,
@@ -15,10 +16,11 @@ export class User {
   @Column({ unique: true })
   username: string;
 
+  @Exclude()
   @Column()
   password: string;
 
-  @OneToOne(() => Quote, (quote) => quote.user)
+  @OneToOne(() => Quote)
   @JoinColumn()
   quote: Quote;
 }

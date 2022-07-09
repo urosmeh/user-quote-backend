@@ -19,7 +19,11 @@ export class UsersService {
   }
 
   async findById(id: number): Promise<User | undefined> {
-    return this.repo.findOne({ relations: ['quote'], where: { id } });
+    const user = await this.repo.findOne({
+      relations: ['quote'],
+      where: { id },
+    });
+    return user;
   }
 
   async find(username: string): Promise<User[] | []> {

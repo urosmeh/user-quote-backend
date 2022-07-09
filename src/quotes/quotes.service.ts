@@ -10,7 +10,6 @@ export class QuotesService {
 
   async findById(id: number) {
     const quote = await this.repo.findOne({
-      relations: ['user'],
       where: { id },
     });
     if (!quote) {

@@ -1,20 +1,25 @@
-import { User } from 'src/users/user.entity';
+import { Expose } from 'class-transformer';
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Quote {
+  @Expose() //TODO: create dto ?
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Expose()
   @Column()
   quote: string;
 
+  @Expose()
   @Column()
   upvotes: number;
 
+  @Expose()
   @Column()
   downvotes: number;
 
-  @OneToOne(() => User, (user) => user.quote)
-  user: User;
+  // @Expose()
+  // @OneToOne(() => User, (user) => user.quote)
+  // user: User;
 }
