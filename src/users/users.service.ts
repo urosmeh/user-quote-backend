@@ -15,11 +15,11 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.repo.findOne({ where: { username } }); //username is unique, so this should be ok...
+    return this.repo.findOne({ relations: ['quote'], where: { username } }); //username is unique, so this should be ok...
   }
 
   async findById(id: number): Promise<User | undefined> {
-    return this.repo.findOne({ where: { id } });
+    return this.repo.findOne({ relations: ['quote'], where: { id } });
   }
 
   async find(username: string): Promise<User[] | []> {

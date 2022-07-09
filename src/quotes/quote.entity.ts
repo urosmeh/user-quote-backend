@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Quote {
@@ -13,4 +14,7 @@ export class Quote {
 
   @Column()
   downvotes: number;
+
+  @OneToOne(() => User, (user) => user.quote)
+  user: User;
 }

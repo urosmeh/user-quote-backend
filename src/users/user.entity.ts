@@ -5,7 +5,6 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 
 @Entity()
@@ -19,7 +18,7 @@ export class User {
   @Column()
   password: string;
 
-  @OneToOne(() => Quote)
+  @OneToOne(() => Quote, (quote) => quote.user)
   @JoinColumn()
   quote: Quote;
 }

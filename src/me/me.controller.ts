@@ -10,11 +10,12 @@ export class MeController {
   constructor(private usersService: UsersService) {}
 
   @Get()
-  getCurrentUser(@Req() request: RequestWithUser) {
+  async getCurrentUser(@Req() request: RequestWithUser) {
     //TODO: add users quote?
-    const user = request.user;
+    const userId = request.user.id;
+    const user = await this.usersService.findById(userId);
     user.password = undefined;
-    return request.user;
+    return user;
   }
 
   @Patch('update-password')
