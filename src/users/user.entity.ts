@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Quote } from 'src/quotes/quote.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -10,4 +18,8 @@ export class User {
 
   @Column()
   password: string;
+
+  @OneToOne(() => Quote)
+  @JoinColumn()
+  quote: Quote;
 }
