@@ -21,9 +21,7 @@ export class QuotesService {
 
   async vote(id: number, voteType: VoteType) {
     const quote = await this.findById(id);
-    console.log(quote, 'pre');
     voteType === VoteType.UPVOTE ? quote.upvotes++ : quote.downvotes++;
-    console.log(quote, 'post');
     return this.repo.save(quote);
   }
 }
