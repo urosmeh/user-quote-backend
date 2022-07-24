@@ -18,6 +18,10 @@ export class QuotesService {
     return quote;
   }
 
+  async create(quote: string): Promise<Quote> {
+    return this.repo.save({ quote });
+  }
+
   async vote(id: number, voteType: VoteType) {
     const quote = await this.findById(id);
     voteType === VoteType.UPVOTE ? quote.upvotes++ : quote.downvotes++;

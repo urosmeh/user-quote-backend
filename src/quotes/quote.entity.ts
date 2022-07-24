@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Quote {
@@ -12,11 +12,11 @@ export class Quote {
   quote: string;
 
   @Expose()
-  @Column()
+  @Column({ default: 0 })
   upvotes: number;
 
   @Expose()
-  @Column()
+  @Column({ default: 0 })
   downvotes: number;
 
   // @Expose()

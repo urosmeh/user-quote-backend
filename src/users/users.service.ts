@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Quote } from 'src/quotes/quote.entity';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 const bcrypt = require('bcrypt');
@@ -41,6 +42,13 @@ export class UsersService {
 
     user.password = hashedPass;
 
+    return this.repo.save(user);
+  }
+
+  //this could be updating more things...
+  async updateQuote(id:number, quote: Quote) {
+    const user = await this.findById(id);
+    Object.assign(user.quote, quote);
     return this.repo.save(user);
   }
 }
