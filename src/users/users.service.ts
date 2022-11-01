@@ -16,12 +16,15 @@ export class UsersService {
   }
 
   async findOne(username: string): Promise<User | undefined> {
-    return this.repo.findOne({ relations: ['quote'], where: { username } }); //username is unique, so this should be ok...
+    return this.repo.findOne({
+      relations: { quotes: true },
+      where: { username },
+    }); //username is unique, so this should be ok...
   }
 
   async findById(id: number): Promise<User | undefined> {
     const user = await this.repo.findOne({
-      relations: ['quote'],
+      relations: { quotes: true },
       where: { id },
     });
     return user;
@@ -42,13 +45,6 @@ export class UsersService {
 
     user.password = hashedPass;
 
-    return this.repo.save(user);
-  }
-
-  //this could be updating more things...
-  async updateQuote(id:number, quote: Quote) {
-    const user = await this.findById(id);
-    Object.assign(user.quote, quote);
     return this.repo.save(user);
   }
 }

@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/users/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Quote {
@@ -19,7 +20,7 @@ export class Quote {
   @Column({ default: 0 })
   downvotes: number;
 
-  // @Expose()
-  // @OneToOne(() => User, (user) => user.quote)
-  // user: User;
+  @Expose()
+  @ManyToOne(() => User, (user) => user.quotes)
+  user: User;
 }
