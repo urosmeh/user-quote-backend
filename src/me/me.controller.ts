@@ -2,6 +2,9 @@ import {
   Body,
   Controller,
   Get,
+  MethodNotAllowedException,
+  NotFoundException,
+  Param,
   Patch,
   Post,
   Req,
@@ -9,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UpdateQuoteDto } from 'src/quotes/dtos/update-quote-dto';
 import { QuotesService } from 'src/quotes/quotes.service';
 import { UserWithQuoteDto } from 'src/users/dtos/user-with-quote.dto';
 import { UsersService } from 'src/users/users.service';
@@ -44,8 +48,23 @@ export class MeController {
     @Body() body: CreateQuoteDto,
   ) {
     const user = request.user;
-    const quote = await this.quotesService.create(body.quote);
-    // Object.assign(user.quote, quote);
-    return this.usersService.updateQuote(user.id, quote);
+    return await this.quotesService.create(body.quote, user);
+  }
+
+  @Patch('my-quote/:id')
+  async updateQuote(
+    @Req() request: RequestWithUser,
+    @Param('id') id: string,
+    @Body() body: UpdateQuoteDto,
+  ) {
+    const user = request.user;
+
+    const quote = await this.quotesService.findById(parseInt(id));
+
+    if (quote.user.id !== user.id) {
+      throw new MethodNotAllowedException('You can only edit your own quotes!');
+    }
+
+    return await this.quotesService.update(parseInt(id), body);
   }
 }

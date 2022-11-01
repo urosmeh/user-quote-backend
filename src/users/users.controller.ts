@@ -32,13 +32,14 @@ export class UsersController {
   async upvote(@Param('id') id: string) {
     const user = await this.usersService.findById(parseInt(id));
 
-    if (!user.quote) {
-      throw new NotFoundException('User has no quotes!');
-    }
+    // if (!user.quote) {
+    //   throw new NotFoundException('User has no quotes!');
+    // }
+    
+    //todo: FIX QUOTES HERE!
+    // const quote = await this.quotesService.vote(user.quote.id, VoteType.UPVOTE);
 
-    const quote = await this.quotesService.vote(user.quote.id, VoteType.UPVOTE);
-
-    Object.assign(user.quote, quote);
+    // Object.assign(user.quote, quote);
     return user;
   }
 
@@ -47,16 +48,17 @@ export class UsersController {
   async downvote(@Param('id') id: string) {
     const user = await this.usersService.findById(parseInt(id));
 
-    if (!user.quote) {
-      throw new NotFoundException('User has no quotes!');
-    }
+    // if (!user.quote) {
+    //   throw new NotFoundException('User has no quotes!');
+    // }
 
-    const quote = await this.quotesService.vote(
-      user.quote.id,
-      VoteType.DOWNVOTE,
-    );
+    // //todo: FIX QUOTES HERE!
+    // const quote = await this.quotesService.vote(
+    //   user.quote.id,
+    //   VoteType.DOWNVOTE,
+    // );
 
-    Object.assign(user.quote, quote);
+    // Object.assign(user.quote, quote);
     return user;
   }
 }
