@@ -3,19 +3,18 @@ import {
   Controller,
   Get,
   MethodNotAllowedException,
-  NotFoundException,
   Param,
   Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { UpdateQuoteDto } from 'src/quotes/dtos/update-quote-dto';
-import { QuotesService } from 'src/quotes/quotes.service';
-import { UserWithQuoteDto } from 'src/users/dtos/user-with-quote.dto';
-import { UsersService } from 'src/users/users.service';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Serialize } from '../interceptors/serialize.interceptor';
+import { UpdateQuoteDto } from '../quotes/dtos/update-quote-dto';
+import { QuotesService } from '../quotes/quotes.service';
+import { UserWithQuoteDto } from '../users/dtos/user-with-quote.dto';
+import { UsersService } from '../users/users.service';
 import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
 import { CreateQuoteDto } from './dtos/create-quote.dto';
 import { UpdateUserDto } from './dtos/update-user-dto';
@@ -30,8 +29,9 @@ export class MeController {
   ) {}
 
   @Get()
-  async getCurrentUser(@Req() request: RequestWithUser) {
-    //TODO: add users quote?
+  async getCurrentUser(
+    @Req() request: RequestWithUser,
+  ): Promise<UserWithQuoteDto> {
     const userId = request.user.id;
     const user = await this.usersService.findById(userId);
     return user;
