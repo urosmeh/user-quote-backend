@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { MeModule } from './me/me.module';
 import { QuotesModule } from './quotes/quotes.module';
 import { Quote } from './quotes/quote.entity';
+import { VotesModule } from './votes/votes.module';
+import { Vote } from './votes/vote.entity';
 
 @Module({
   imports: [
@@ -16,11 +18,13 @@ import { Quote } from './quotes/quote.entity';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      entities: [User, Quote],
+      entities: [User, Quote, Vote],
       synchronize: true,
+      // logging: true,
     }),
     MeModule,
     QuotesModule,
+    VotesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
-import { Quote } from 'src/quotes/quote.entity';
+import { Vote } from 'src/votes/vote.entity';
+import { Quote } from '../../quotes/quote.entity';
 
 export class UserWithQuoteDto {
   @Expose()
@@ -13,4 +14,9 @@ export class UserWithQuoteDto {
   @Expose()
   @Type(() => Quote)
   quotes: Quote[];
+
+  @ValidateNested()
+  @Expose()
+  @Type(() => Vote)
+  votes: Vote[];
 }

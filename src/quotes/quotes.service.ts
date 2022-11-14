@@ -1,28 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VoteType } from 'src/common/interfaces/vote-type.enum';
 import { Repository } from 'typeorm';
 import { UpdateQuoteDto } from './dtos/update-quote-dto';
 import { Quote } from './quote.entity';
+import { QuoteStats } from '../common/interfaces/quote-stats.interface';
+import { calculateQuoteStats } from 'src/common/utils/calculate-quote-stats';
 
 @Injectable()
 export class QuotesService {
   constructor(@InjectRepository(Quote) private repo: Repository<Quote>) {}
 
   async findAll(): Promise<Quote[]> {
-    const quotes = await this.repo.find({ relations: { user: true } });
+    let quotes = await this.repo.find({
+      relations: { user: true, votes: true },
+    });
+
+    quotes.map((quote) => {
+      const stats: QuoteStats = calculateQuoteStats(quote);
+      quote.upvotes = stats.upvotes;
+      quote.downvotes = stats.downvotes;
+    });
+
+    quotes.sort((a, b) => a.upvotes - b.upvotes).reverse();
+
     return quotes;
   }
 
   async findById(id: number) {
     const quote = await this.repo.findOne({
-      relations: { user: true },
+      relations: { user: true, votes: true },
       where: { id },
     });
 
     if (!quote) {
       throw new NotFoundException();
     }
+
+    const stats: QuoteStats = calculateQuoteStats(quote);
+    quote.upvotes = stats.upvotes;
+    quote.downvotes = stats.downvotes;
+
     return quote;
   }
 
@@ -39,11 +56,5 @@ export class QuotesService {
 
     existingQuote.quote = quote;
     return this.repo.save(existingQuote);
-  }
-
-  async vote(id: number, voteType: VoteType) {
-    const quote = await this.findById(id);
-    voteType === VoteType.UPVOTE ? quote.upvotes++ : quote.downvotes++;
-    return this.repo.save(quote);
   }
 }

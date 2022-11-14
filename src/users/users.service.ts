@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Quote } from 'src/quotes/quote.entity';
-import { Repository } from 'typeorm';
+import { QuoteStats } from '../common/interfaces/quote-stats.interface';
+import { calculateQuoteStats } from 'src/common/utils/calculate-quote-stats';
 import { User } from './user.entity';
+import { Repository } from 'typeorm';
 const bcrypt = require('bcrypt');
 
 @Injectable()
@@ -24,9 +25,19 @@ export class UsersService {
 
   async findById(id: number): Promise<User | undefined> {
     const user = await this.repo.findOne({
-      relations: { quotes: true },
+      relations: { quotes: { votes: true }, votes: true },
       where: { id },
     });
+
+    user.quotes.forEach((quote) => {
+      const stats: QuoteStats = calculateQuoteStats(quote);
+      quote.upvotes = stats.upvotes;
+      quote.downvotes = stats.downvotes;
+      delete quote.votes;
+    });
+
+    user.quotes.sort((a, b) => a.upvotes - b.upvotes).reverse();
+
     return user;
   }
 

@@ -1,11 +1,11 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { User } from 'src/users/user.entity';
+import { User } from '../users/user.entity';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
 import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
-import { UserDto } from 'src/users/dtos/user.dto';
-import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { UserDto } from '../users/dtos/user.dto';
+import { Serialize } from '../interceptors/serialize.interceptor';
 
 @Serialize(UserDto)
 @Controller('auth')
