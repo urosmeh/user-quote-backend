@@ -17,9 +17,18 @@ export class AuthController {
   async login(@Req() request: RequestWithUser): Promise<UserDto> {
     //TODO: fix type in parameters
     const { user } = request;
-    const cookie = this.authService.getCookieWithJwt(user.id);
-    request.res.setHeader('Set-Cookie', cookie);
-    return user;
+    const token = await this.authService.login(user.id);
+
+    const res = {
+      token,
+      username: user.username,
+      id: user.id,
+    };
+
+    return res;
+    // const cookie = this.authService.getCookieWithJwt(user.id);
+    // request.res.setHeader('Set-Cookie', cookie);
+    // return user;
   }
 
   @Post('signup')

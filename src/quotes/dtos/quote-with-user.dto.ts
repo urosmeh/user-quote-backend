@@ -1,5 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { ValidateNested } from 'class-validator';
+import { Vote } from 'src/votes/vote.entity';
 import { User } from '../../users/user.entity';
 
 export class QuoteWithUserDto {
@@ -14,14 +15,16 @@ export class QuoteWithUserDto {
   @Type(() => User)
   user: User;
 
+  @ValidateNested()
+  @Expose()
+  votes: Vote[];
+
   @Expose()
   upvotes?: number;
 
   @Expose()
   downvotes?: number;
 
-  // @ValidateNested()
-  // @Expose()
-  // @Type(() => Vote)
-  // votes: Vote[];
+  @Expose()
+  score?: number;
 }

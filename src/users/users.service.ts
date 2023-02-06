@@ -4,7 +4,7 @@ import { QuoteStats } from '../common/interfaces/quote-stats.interface';
 import { calculateQuoteStats } from 'src/common/utils/calculate-quote-stats';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-const bcrypt = require('bcrypt');
+import bcrypt = require('bcrypt');
 
 @Injectable()
 export class UsersService {

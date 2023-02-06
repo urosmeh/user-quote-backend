@@ -1,7 +1,13 @@
 import { Expose } from 'class-transformer';
 import { Quote } from '../quotes/quote.entity';
 import { User } from '../users/user.entity';
-import { Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Vote {
@@ -22,10 +28,10 @@ export class Vote {
   type: number;
 
   @ManyToOne(() => User, (user) => user.votes)
-  @JoinColumn({name: "userId"})
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @ManyToOne(() => Quote, (quote) => quote.votes)
-  @JoinColumn({name: "quoteId"})
+  @JoinColumn({ name: 'quoteId' })
   quote: Quote;
 }

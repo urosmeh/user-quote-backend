@@ -28,6 +28,6 @@ export class VotesService {
   }
 
   async voteExists(userId: number, quoteId: number, type: number) {
-    return (await this.repo.count({ where: { userId, quoteId, type } }) === 0);
+    return (await this.repo.count({ where: { userId, quoteId, type } })) === 0;
   }
 }

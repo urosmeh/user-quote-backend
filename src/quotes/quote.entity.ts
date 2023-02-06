@@ -29,6 +29,10 @@ export class Quote {
 
   @Expose()
   upvotes?: number;
+
   @Expose()
   downvotes?: number;
+
+  @Expose()
+  score?: number;
 }

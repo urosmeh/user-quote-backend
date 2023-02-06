@@ -11,17 +11,22 @@ export class QuotesService {
   constructor(@InjectRepository(Quote) private repo: Repository<Quote>) {}
 
   async findAll(): Promise<Quote[]> {
-    let quotes = await this.repo.find({
+    const quotes = await this.repo.find({
       relations: { user: true, votes: true },
     });
 
+    // console.log(await this.repo.createQueryBuilder("quote").leftJoinAndSelect("vote", "votes", "votes.quoteId == quote.Id").select(["quote.id", "quote.quote", "votes"]).getMany());
+    // const user = await createQueryBuilder("user")
+    // .leftJoinAndSelect("photos", "photo", "photo.userId = user.id")
+    // .getMany()
     quotes.map((quote) => {
       const stats: QuoteStats = calculateQuoteStats(quote);
       quote.upvotes = stats.upvotes;
       quote.downvotes = stats.downvotes;
+      quote.score = stats.score;
     });
 
-    quotes.sort((a, b) => a.upvotes - b.upvotes).reverse();
+    quotes.sort((a, b) => b.score - a.score);
 
     return quotes;
   }

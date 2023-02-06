@@ -1,4 +1,5 @@
 export interface QuoteStats {
-    upvotes: number;
-    downvotes: number;
+  upvotes: number;
+  downvotes: number;
+  score: number;
 }
