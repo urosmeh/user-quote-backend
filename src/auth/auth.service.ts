@@ -1,8 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './jwt-payload.interface';
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -12,17 +16,26 @@ export class AuthService {
   ) {}
 
   async validateUser(username: string, password: string) {
+    if (!password || !username) {
+      throw new BadRequestException('Password missing');
+    }
+
     const user = await this.usersService.findOne(username);
+    if (!user) {
+      throw new UnauthorizedException('Unauthorized', 'Wrong credentials!');
+    }
     //this will throw an error if password incorrect, otherwise it will run normally
     await this.verifyPassword(password, user.password);
     return user;
   }
 
-  async login(user: any) {
-    const payload = { name: user.name, sub: user.id }; //TODO: Is this ok?
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async login(userId: number) {
+    const payload: TokenPayload = { userId }; //TODO: Is this ok?
+    return this.jwtService.sign(payload);
+    // console.log(`payload ${JSON.stringify(payload)}`);
+    // return {
+    //   access_token: this.jwtService.sign(payload),
+    // };
   }
 
   async signup(username: string, password: string) {
@@ -40,7 +53,7 @@ export class AuthService {
     const matching = await bcrypt.compare(password, hashedPassword);
 
     if (!matching) {
-      throw new BadRequestException('Wrong credentials!');
+      throw new UnauthorizedException('Unauthorized', 'Wrong credentials!');
     }
   }
 

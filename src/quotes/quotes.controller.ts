@@ -16,7 +16,7 @@ export class QuotesController {
   ) {}
 
   @Get()
-  async findAll(@Req() request): Promise<QuoteWithUserDto[]> {
+  async findAll(): Promise<QuoteWithUserDto[]> {
     const quotes = await this.quotesService.findAll();
     return quotes;
   }
@@ -33,7 +33,6 @@ export class QuotesController {
     @Param('id') id: string,
     @Req() request: RequestWithUser,
   ): Promise<QuoteWithUserDto> {
-    //todo: remove vote if same type is triggered?
     const userId = request.user.id;
     await this.votesService.upvote(userId, parseInt(id));
     return await this.findById(id);
@@ -45,9 +44,8 @@ export class QuotesController {
     @Param('id') id: string,
     @Req() request: RequestWithUser,
   ): Promise<QuoteWithUserDto> {
-    //todo: check if user already downvoted this quote
     const userId = request.user.id;
-    const quote = await this.findById(id);
-    return quote;
+    await this.votesService.upvote(userId, parseInt(id));
+    return await this.findById(id);
   }
 }
