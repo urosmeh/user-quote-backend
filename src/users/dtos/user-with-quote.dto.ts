@@ -19,4 +19,7 @@ export class UserWithQuoteDto {
   @Expose()
   @Type(() => Vote)
   votes: Vote[];
+
+  @Expose()
+  avatar?: string;
 }

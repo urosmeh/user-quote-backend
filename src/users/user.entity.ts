@@ -18,6 +18,9 @@ export class User {
   @Column()
   password: string;
 
+  @Column({ nullable: true })
+  avatar: string;
+
   @Expose()
   @OneToMany(() => Quote, (quote) => quote.user)
   quotes: Quote[];

@@ -58,4 +58,16 @@ export class UsersService {
 
     return this.repo.save(user);
   }
+
+  async setUserAvatar(id: number, filename: string) {
+    const user = await this.findById(id);
+
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+
+    user.avatar = filename;
+
+    return this.repo.save(user);
+  }
 }

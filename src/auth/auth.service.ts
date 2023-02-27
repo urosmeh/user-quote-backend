@@ -6,8 +6,8 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from './jwt-payload.interface';
-import bcrypt from 'bcrypt';
-
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcrypt');
 @Injectable()
 export class AuthService {
   constructor(
